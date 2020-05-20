@@ -58,16 +58,16 @@ void setup()
 void loop() {
  
   if(digitalRead(5)==LOW){
-    Keyboard.press('a');
+    Keyboard.press('d');
   }
   if(digitalRead(5)==HIGH){
-    Keyboard.release('a');
+    Keyboard.release('d');
   }
   if(digitalRead(6)==LOW){
-    Keyboard.press('b');
+    Keyboard.press('r');
   }
   if(digitalRead(6)==HIGH){
-    Keyboard.release('b');
+    Keyboard.release('r');
   }
   if(digitalRead(7)==LOW){
     Keyboard.press('c');
@@ -76,16 +76,16 @@ void loop() {
     Keyboard.release('c');
   }
   if(digitalRead(8)==LOW){
-    Keyboard.press('d');
+    Keyboard.press('l');
   }
   if(digitalRead(8)==HIGH){
-    Keyboard.release('d');
+    Keyboard.release('l');
   }
   if(digitalRead(9)==LOW){
-    Keyboard.press('i');
+    Keyboard.press('b');
   }
   if(digitalRead(9)==HIGH){
-    Keyboard.release('i');
+    Keyboard.release('b');
   }
   if(digitalRead(12)==LOW){
     Keyboard.press('f');
@@ -94,10 +94,10 @@ void loop() {
     Keyboard.release('f');
   }
   if(digitalRead(11)==LOW){
-    Keyboard.press('g');
+    Keyboard.press('a');
   }
   if(digitalRead(11)==HIGH){
-    Keyboard.release('g');
+    Keyboard.release('a');
   }
   //Encoder Reset  
     if(digitalRead(5)==LOW&&digitalRead(7)==LOW&&digitalRead(9)==LOW&&digitalRead(11)==LOW&&digitalRead(12)==LOW){ 
@@ -107,7 +107,20 @@ void loop() {
   if(digitalRead(9)==LOW&&digitalRead(11)==LOW&&digitalRead(8)==LOW&&digitalRead(12)==LOW){
     GB_Mode+=1;
     while(digitalRead(12)==LOW);
-  }
+  } //거병모드
+  if(digitalRead(6)==LOW&&digitalRead(8)==LOW&&digitalRead(12)==LOW){
+    int duration=millis();
+    while(digitalRead(12)==LOW&&millis()-duration<1000){}
+    duration=millis()-duration;
+    if(duration<1000){
+      Keyboard.press(KEY_ESC);
+      Keyboard.release(KEY_ESC);
+    }else{
+      Keyboard.press(KEY_F5);
+      Keyboard.release(KEY_F5);
+    }
+    while(digitalRead(12)==LOW){}
+  } //나가기, 재시작
   modechange = modechange%2;
   if(GB_Mode%2){
     up++;
