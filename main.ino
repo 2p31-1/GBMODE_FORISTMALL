@@ -32,7 +32,7 @@ int modechange = 0;  //KSM 모드&SDVX 모드 변환용 변수
  
 void setup()
 {
-  pinMode(5, INPUT_PULLUP); //a
+  pinMode(5, INPUT_PULLUP); //e
   pinMode(6, INPUT_PULLUP); //b
   pinMode(7, INPUT_PULLUP); //c
   pinMode(8, INPUT_PULLUP); // d
@@ -94,10 +94,10 @@ void loop() {
     Keyboard.release('f');
   }
   if(digitalRead(11)==LOW){
-    Keyboard.press('a');
+    Keyboard.press('e');
   }
   if(digitalRead(11)==HIGH){
-    Keyboard.release('a');
+    Keyboard.release('e');
   }
   //Encoder Reset  
     if(digitalRead(5)==LOW&&digitalRead(7)==LOW&&digitalRead(9)==LOW&&digitalRead(11)==LOW&&digitalRead(12)==LOW){ 
@@ -108,19 +108,29 @@ void loop() {
     GB_Mode+=1;
     while(digitalRead(12)==LOW);
   } //거병모드
+
+
+
+  
   if(digitalRead(6)==LOW&&digitalRead(8)==LOW&&digitalRead(12)==LOW){
-    int duration=millis();
-    while(digitalRead(12)==LOW&&millis()-duration<1000){}
-    duration=millis()-duration;
-    if(duration<1000){
-      Keyboard.press(KEY_ESC);
-      Keyboard.release(KEY_ESC);
-    }else{
+    int dur_flag=1;
+    if(millis()-duration>3000){
       Keyboard.press(KEY_F5);
       Keyboard.release(KEY_F5);
     }
-    while(digitalRead(12)==LOW){}
-  } //나가기, 재시작
+  }else{
+    if(dur_flag){
+      duration=millis()-duration;
+      if(duration>1000){
+      Keyboard.press(KEY_ESC);
+      Keyboard.release(KEY_ESC);
+      }
+    }
+    }
+    dur_flag=0;
+    duration=millis();
+    //나가기, 재시작
+  }
   modechange = modechange%2;
   if(GB_Mode%2){
     up++;
@@ -225,6 +235,3 @@ void doEncoderD()
     rotating[1] = false;
   }
 }
-
-//original code : LEONARDOJoy (http://pastebin.com/3ypgaRBd)
-//modified by QC.G0X
