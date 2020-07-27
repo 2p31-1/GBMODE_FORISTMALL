@@ -27,8 +27,64 @@
 
 int up=0;
 int GB_Mode=0;
+long duration;
+int dur_flag;
 
 int modechange = 0;  //KSM 모드&SDVX 모드 변환용 변수
+
+
+ 
+void doEncoderA()
+{
+ 
+  if( digitalRead(encoderPinA) != A_set )
+  {  
+    A_set = !A_set;
+ 
+    if ( A_set && !B_set )
+      encoderPos[0] += 1;
+ 
+    rotating[0] = false;  
+  }
+}
+ 
+void doEncoderB()
+{
+ 
+  if( digitalRead(encoderPinB) != B_set ) {
+    B_set = !B_set;
+   
+    if( B_set && !A_set )
+      encoderPos[0] -= 1;
+ 
+    rotating[0] = false;
+  }
+}
+ 
+void doEncoderC()
+{
+  if( digitalRead(encoderPinC) != C_set )
+  {  
+    C_set = !C_set;
+ 
+    if ( C_set && !D_set )
+      encoderPos[1] += 1;
+ 
+    rotating[1] = false;
+  }
+}
+ 
+void doEncoderD()
+{
+  if( digitalRead(encoderPinD) != D_set ) {
+    D_set = !D_set;
+   
+    if( D_set && !C_set )
+      encoderPos[1] -= 1;
+ 
+    rotating[1] = false;
+  }
+}
  
 void setup()
 {
@@ -113,23 +169,23 @@ void loop() {
 
   
   if(digitalRead(6)==LOW&&digitalRead(8)==LOW&&digitalRead(12)==LOW){
-    int dur_flag=1;
+    dur_flag=1;
     if(millis()-duration>3000){
       Keyboard.press(KEY_F5);
       Keyboard.release(KEY_F5);
+      duration=millis();
     }
   }else{
     if(dur_flag){
       duration=millis()-duration;
       if(duration>1000){
-      Keyboard.press(KEY_ESC);
-      Keyboard.release(KEY_ESC);
+        Keyboard.press(KEY_ESC);
+        Keyboard.release(KEY_ESC);
       }
-    }
+      
     }
     dur_flag=0;
     duration=millis();
-    //나가기, 재시작
   }
   modechange = modechange%2;
   if(GB_Mode%2){
@@ -182,56 +238,4 @@ void loop() {
 
  
   delay(DELAY);
-}
- 
-void doEncoderA()
-{
- 
-  if( digitalRead(encoderPinA) != A_set )
-  {  
-    A_set = !A_set;
- 
-    if ( A_set && !B_set )
-      encoderPos[0] += 1;
- 
-    rotating[0] = false;  
-  }
-}
- 
-void doEncoderB()
-{
- 
-  if( digitalRead(encoderPinB) != B_set ) {
-    B_set = !B_set;
-   
-    if( B_set && !A_set )
-      encoderPos[0] -= 1;
- 
-    rotating[0] = false;
-  }
-}
- 
-void doEncoderC()
-{
-  if( digitalRead(encoderPinC) != C_set )
-  {  
-    C_set = !C_set;
- 
-    if ( C_set && !D_set )
-      encoderPos[1] += 1;
- 
-    rotating[1] = false;
-  }
-}
- 
-void doEncoderD()
-{
-  if( digitalRead(encoderPinD) != D_set ) {
-    D_set = !D_set;
-   
-    if( D_set && !C_set )
-      encoderPos[1] -= 1;
- 
-    rotating[1] = false;
-  }
 }
